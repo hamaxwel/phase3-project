@@ -100,6 +100,10 @@ The database file `farm_management.db` is automatically created in the project d
 
 *   Select the ID of the item (product/farmer/sale) to update, then modify the fields as needed.
 
+### links
+* slides link: https://www.canva.com/design/DAGZxPS-v3s/kM4GeFZ-tOMjfgKDR7NmKw/edit?utm_content=DAGZxPS-v3s&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+* video link: https://drive.google.com/file/d/1Lx6FWBkrwVQdYQ94BsMdfmacZgW7ICfV/view?usp=sharing
+
 ## Contributing
 ------------
 

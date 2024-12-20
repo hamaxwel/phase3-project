@@ -1,74 +1,32 @@
+import sqlite3
 from models.products import *
 from models.sales import *
 from models.farmers import *
 
-def main_menu():
-    # Initialize tables
-    create_farmers_table()
-    create_products_table()
-    create_sales_table()
+# Function to delete a farmer
+def delete_farmer(farmer_id):
+    conn = sqlite3.connect("farm_management.db")
+    cursor = conn.cursor()
 
-    while True:
-        print("==== Farm Management System ====")
-        print("1. Add Farmer")
-        print("2. View Farmers")
-        print("3. Delete Farmer")
-        print("4. Update Farmer")
-        print("5. Add Product")
-        print("6. View Products")
-        print("7. Update Product")
-        print("8. Delete Product")
-        print("9. Add Sale")
-        print("10. View Sales")
-        print("11. Update Sale")
-        print("12. Delete Sale")
-        print("13. Exit")
-        choice = input("Enter your choice: ")
+    # Check if the farmer exists
+    query = "SELECT * FROM farmers WHERE id = ?"
+    cursor.execute(query, (farmer_id,))
+    farmer = cursor.fetchone()
 
-        if choice == "1":
-            add_farmer()
-        elif choice == "2":
-            view_farmers()
-        elif choice == "3":
-            farmer_id = int(input("Enter farmer ID to delete: "))
-            delete_farmer(farmer_id)
-        elif choice == "4":
-            farmer_id = int(input("Enter farmer ID to update: "))
-            update_farmer(farmer_id)
-        elif choice == "5":
-            name = input("Enter product name: ")
-            product_type = input("Enter product type: ")
-            price = float(input("Enter product price: "))
-            farmer_id = int(input("Enter farmer ID: "))
-            add_product(name, product_type, price, farmer_id)
-        elif choice == "6":
-            view_products()
-        elif choice == "7":
-            product_id = int(input("Enter product ID to update: "))
-            update_product(product_id)
-        elif choice == "8":
-            product_id = int(input("Enter product ID to delete: "))
-            delete_product(product_id)
-        elif choice == "9":
-            product_id = int(input("Enter product ID: "))
-            quantity_sold = int(input("Enter quantity sold: "))
-            sale_date = input("Enter sale date (YYYY-MM-DD): ")
-            customer_name = input("Enter customer name: ")
-            customer_contact = input("Enter customer contact: ")
-            add_sale(product_id, quantity_sold, sale_date, customer_name, customer_contact)
-        elif choice == "10":
-            view_sales()
-        elif choice == "11":
-            sale_id = int(input("Enter sale ID to update: "))
-            update_sale(sale_id)
-        elif choice == "12":
-            sale_id = int(input("Enter sale ID to delete: "))
-            delete_sale(sale_id)
-        elif choice == "13":
-            print("Exiting... Goodbye!")
-            break
-        else:
-            print("Invalid choice. Please try again.\n")
+    if farmer is None:
+        print("Farmer not found.\n")
+        cursor.close()
+        conn.close()
+        return
+
+    # Delete the farmer
+    query = "DELETE FROM farmers WHERE id = ?"
+    cursor.execute(query, (farmer_id,))
+    conn.commit()
+
+    print(f"Farmer with ID {farmer_id} deleted successfully!\n")
+    cursor.close()
+    conn.close()
 
 # Function to update a product
 def update_product(product_id):
@@ -147,6 +105,75 @@ def update_farmer(farmer_id):
     print("Farmer details updated successfully!\n")
     cursor.close()
     conn.close()
+
+# Main menu
+def main_menu():
+    # Initialize tables
+    create_farmers_table()
+    create_products_table()
+    create_sales_table()
+
+    while True:
+        print("==== Farm Management System ====")
+        print("1. Add Farmer")
+        print("2. View Farmers")
+        print("3. Delete Farmer")
+        print("4. Update Farmer")
+        print("5. Add Product")
+        print("6. View Products")
+        print("7. Update Product")
+        print("8. Delete Product")
+        print("9. Add Sale")
+        print("10. View Sales")
+        print("11. Update Sale")
+        print("12. Delete Sale")
+        print("13. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            add_farmer()
+        elif choice == "2":
+            view_farmers()
+        elif choice == "3":
+            farmer_id = int(input("Enter farmer ID to delete: "))
+            delete_farmer(farmer_id)
+        elif choice == "4":
+            farmer_id = int(input("Enter farmer ID to update: "))
+            update_farmer(farmer_id)
+        elif choice == "5":
+            name = input("Enter product name: ")
+            product_type = input("Enter product type: ")
+            price = float(input("Enter product price: "))
+            farmer_id = int(input("Enter farmer ID: "))
+            add_product(name, product_type, price, farmer_id)
+        elif choice == "6":
+            view_products()
+        elif choice == "7":
+            product_id = int(input("Enter product ID to update: "))
+            update_product(product_id)
+        elif choice == "8":
+            product_id = int(input("Enter product ID to delete: "))
+            delete_product(product_id)
+        elif choice == "9":
+            product_id = int(input("Enter product ID: "))
+            quantity_sold = int(input("Enter quantity sold: "))
+            sale_date = input("Enter sale date (YYYY-MM-DD): ")
+            customer_name = input("Enter customer name: ")
+            customer_contact = input("Enter customer contact: ")
+            add_sale(product_id, quantity_sold, sale_date, customer_name, customer_contact)
+        elif choice == "10":
+            view_sales()
+        elif choice == "11":
+            sale_id = int(input("Enter sale ID to update: "))
+            update_sale(sale_id)
+        elif choice == "12":
+            sale_id = int(input("Enter sale ID to delete: "))
+            delete_sale(sale_id)
+        elif choice == "13":
+            print("Exiting... Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.\n")
 
 # Run the program
 if __name__ == "__main__":
